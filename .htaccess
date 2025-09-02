@@ -1,6 +1,17 @@
 RewriteEngine On
 
-# Redireciona /arquivo para /arquivo.php
+# 1️⃣ Redireciona arquivos .php para versão sem extensão
+RewriteCond %{THE_REQUEST} \s/([^.]+)\.php [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# 2️⃣ Se o arquivo não existe, mas existe .php, serve ele internamente
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.*)$ $1.php [L]
+
+# 3️⃣ Define arquivos index.php como padrão em diretórios
+DirectoryIndex index.php
+
+# 4️⃣ Opcional: força barra no final de diretórios (site.com/admin/ em vez de site.com/admin)
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.+[^/])$ /$1/ [R=301,L]
