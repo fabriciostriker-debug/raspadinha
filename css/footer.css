@@ -1,0 +1,30 @@
+/* Estilos base para o footer compartilhado */
+.site-footer {
+  /* Isola cores do footer contra temas globais */
+  color: #e5e7eb; /* text-gray-200 */
+}
+
+.site-footer a { color: inherit; }
+.site-footer .text-gray-300 { color: #d1d5db !important; }
+.site-footer .text-gray-400 { color: #9ca3af !important; }
+.site-footer .text-gray-500 { color: #6b7280 !important; }
+.site-footer .text-neon-green { color: #00ff88 !important; }
+.site-footer .text-accent-gold { color: #ffd700 !important; }
+.site-footer .text-blue-400 { color: #60a5fa !important; }
+.site-footer .text-purple-400 { color: #c084fc !important; }
+.site-footer .text-yellow-400 { color: #facc15 !important; }
+.site-footer .text-white { color: #ffffff !important; }
+
+/* Ajustes finos para o separador quando fora do contexto Tailwind */
+.footer-separator {
+  border-top: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+/* Responsividade mínima específica do footer */
+@media (max-width: 640px) {
+  .footer-grid {
+    gap: 16px;
+  }
+}
+
+

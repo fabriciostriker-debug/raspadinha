@@ -1,0 +1,421 @@
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #25bb68;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    user-select: none; /* Evita seleção de texto durante raspagem */
+}
+
+.game-container {
+    background: black;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 200px;
+    width: 95%;
+    text-align: center;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.banner {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.balance-button {
+    background: #22C55E;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.main-scratch-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    aspect-ratio: 1;
+    background: black;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.main-scratch-container::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    z-index: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.main-scratch-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    aspect-ratio: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    display: none; /* Escondido pois usaremos canvas */
+}
+
+/* Estilos para canvas de raspagem */
+.scratch-canvas {
+    border-radius: 15px;
+    touch-action: none; /* Evita scroll no mobile durante raspagem */
+}
+
+.individual-scratch-canvas {
+    border-radius: 10px;
+    touch-action: none;
+}
+
+.scratch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: all 0.5s ease;
+}
+
+.scratch-grid.hidden {
+    display: none;
+}
+
+.scratch-grid.visible {
+    display: grid;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.scratch-area {
+    aspect-ratio: 1;
+    background: white;
+    border: 2px solid #22C55E;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 80px;
+}
+
+/* Efeito de brilho para áreas não raspadas */
+.scratch-area:not(.prize):not(.money-note):not(.nothing) {
+    background: linear-gradient(45deg, #F3F4F6, #E5E7EB, #F3F4F6);
+    background-size: 200% 200%;
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.scratch-area.prize {
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    border-color: #F59E0B;
+    color: #92400E;
+    animation: prizeGlow 1s ease-in-out;
+}
+
+@keyframes prizeGlow {
+    0% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.1); }
+    100% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.5); }
+}
+
+.scratch-area.money-note {
+    background: linear-gradient(135deg, white, white);
+    border-color: #25bb68;
+    color: #1E40AF;
+    padding: 10px; /* Aumentado o padding para diminuir a imagem */
+    animation: moneyPop 0.7s ease-out;
+}
+
+.scratch-area.money-note img {
+    width: 110%; /* Diminuído o tamanho da imagem */
+    height: ; /* Diminuído o tamanho da imagem */
+    object-fit: contain; /* Garante que a imagem inteira seja visível */
+    border-radius: 0px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes moneyPop {
+    0% { transform: scale(0.5); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.scratch-area.nothing {
+    background: linear-gradient(135deg, #FEE2E2, #FECACA);
+    border-color: #EF4444;
+    color: #991B1B;
+    animation: fadeInSlow 0.5s ease-in;
+}
+
+@keyframes fadeInSlow {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.footer {
+    text-align: center;
+}
+
+.message {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    min-height: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.play-again-button {
+    background: #22C55E;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.play-again-button:hover {
+    background: #16A34A;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.play-again-button:active {
+    transform: translateY(0);
+}
+
+.play-again-button.visible {
+    display: inline-block;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Indicador de progresso visual */
+.scratch-hint {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.main-scratch-container:hover .scratch-hint {
+    opacity: 1;
+}
+
+/* Responsividade para mobile */
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+    
+    .game-container {
+        padding: 15px;
+        max-width: 350px;
+    }
+    
+    .banner {
+        max-width: 250px;
+    }
+    
+    .balance-button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+    
+    .main-scratch-container {
+        max-width: 280px;
+    }
+    
+    .main-scratch-container::before {
+        font-size: 16px;
+    }
+    
+    .scratch-grid {
+        max-width: 280px;
+        gap: 6px;
+    }
+    
+    .scratch-area {
+        font-size: 14px;
+        min-height: 70px;
+    }
+    
+    .message {
+        font-size: 14px;
+    }
+    
+    .play-again-button {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+}
+
+/* Responsividade para tablets */
+@media (min-width: 481px) and (max-width: 768px) {
+    .game-container {
+        max-width: 450px;
+        padding: 25px;
+    }
+    
+    .main-scratch-container {
+        max-width: 350px;
+    }
+    
+    .main-scratch-container::before {
+        font-size: 20px;
+    }
+    
+    .scratch-grid {
+        max-width: 350px;
+        gap: 10px;
+    }
+    
+    .scratch-area {
+        font-size: 18px;
+        min-height: 90px;
+    }
+}
+
+/* Responsividade para desktop */
+@media (min-width: 769px) {
+    .game-container {
+        max-width: 500px;
+        padding: 30px;
+    }
+    
+    .banner {
+        max-width: 320px;
+    }
+    
+    .balance-button {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+    
+    .main-scratch-container {
+        max-width: 380px;
+    }
+    
+    .main-scratch-container::before {
+        font-size: 22px;
+    }
+    
+    .scratch-grid {
+        max-width: 380px;
+        gap: 12px;
+    }
+    
+    .scratch-area {
+        font-size: 20px;
+        min-height: 100px;
+    }
+    
+    .message {
+        font-size: 18px;
+    }
+    
+    .play-again-button {
+        font-size: 18px;
+        padding: 14px 28px;
+    }
+}
+
+/* Estilos para melhor experiência de raspagem */
+.scratch-canvas:hover {
+    cursor: crosshair;
+}
+
+.individual-scratch-canvas:hover {
+    cursor: crosshair;
+}
+
+/* Evita seleção de texto e outros comportamentos indesejados */
+.game-container * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}

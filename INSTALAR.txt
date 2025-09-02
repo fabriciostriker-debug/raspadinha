@@ -1,0 +1,125 @@
+SCRIPT DISTRIBUIDO GRATUITAMENTE. TELEGRAM: https://t.me/scriptsvazados https://t.me/+3JBRSgl7PPRlYThh
+
+Conta na Hostinger
+O arquivo ZIP do sistema
+Um computador com internet
+
+Passo 1: Preparando a Hostinger
+1.1 - Acessar o painel da Hostinger
+
+Entre no site da Hostinger (hostinger.com.br)
+Faça login na sua conta
+Vá em "Hospedagem" no menu principal
+Clique no seu plano de hospedagem
+
+1.2 - Criar o banco de dados
+
+No painel da Hostinger, procure por "Banco de Dados MySQL"
+Clique em "Gerenciar"
+Clique em "Criar novo banco de dados"
+Dê um nome para o banco (exemplo: meusite_db)
+Crie um usuário para o banco:
+
+Nome do usuário (exemplo: meusite_user)
+Senha forte (anote essa senha!)
+
+
+Clique em "Criar"
+
+⚠️ IMPORTANTE: Anote essas informações:
+
+Nome do banco de dados
+Nome do usuário
+Senha do usuário
+Host (geralmente é localhost)
+
+Passo 2: Enviando os arquivos
+2.1 - Acessar o gerenciador de arquivos
+
+No painel da Hostinger, procure por "Gerenciador de arquivos"
+Clique em "Gerenciar"
+Você verá uma pasta chamada public_html - é aqui que vamos colocar tudo
+
+2.2 - Fazer upload do arquivo ZIP
+
+Entre na pasta public_html
+Clique no botão "Upload" (ícone de seta para cima)
+Selecione o arquivo ZIP do sistema no seu computador
+Aguarde o upload terminar (pode demorar alguns minutos)
+
+2.3 - Descompactar o arquivo
+
+Após o upload, você verá o arquivo ZIP na lista
+Clique com o botão direito no arquivo ZIP
+Selecione "Extrair" ou "Descompactar" ou "Desarquivar"
+Coloque uma "/" no nome da pasta.
+Clique em DESARQUIVAR
+Aguarde a extração terminar
+Depois pode deletar o arquivo ZIP (não precisamos mais dele)
+
+Passo 3: Configurando o banco de dados
+3.1 - Editando o arquivo includes/db.php
+
+Na mesma pagina de arquivos, procure a pasta includes
+Dentro dela, procure o arquivo db.php
+Clique no arquivo e selecione "Editar"
+Você verá um código parecido com isso:
+
+$host = 'localhost';
+$banco = 'nome_do_banco';
+$usuario = 'root';
+$senha = '';
+
+Substitua pelos dados que você anotou no Passo 1.2:
+
+$host = 'localhost'; (geralmente fica assim mesmo)
+$banco = 'meusite_db'; (o nome do banco que você criou)
+$usuario = 'meusite_user'; (o usuário que você criou)
+$senha = 'suasenha123'; (a senha que você criou)
+
+
+Clique em "Salvar e Fechar"
+
+3.2 - Editando o arquivo jogo/db.php
+
+Procure a pasta jogo
+Dentro dela, procure o arquivo db.php
+Faça a mesma edição do passo anterior
+Coloque os mesmos dados de conexão
+Salve o arquivo
+
+Passo 4: Importando as tabelas do banco
+4.1 - Acessar o phpMyAdmin
+
+Volte ao painel principal da Hostinger
+Procure por "phpMyAdmin"
+Clique em "Acessar"
+Faça login (se necessário) com os dados do banco que você criou
+
+4.2 - Importar o arquivo SQL
+
+No phpMyAdmin, clique no nome do seu banco de dados (lado esquerdo)
+Clique na aba "Importar" (no topo)
+Clique em "Escolher arquivo"
+Extraia o zip que você baixou em seu computador (provavelmente esta na pasta Downloads)
+Procure o arquivo sqldb.sql na pasta extraída (estava dentro do ZIP)
+Clique em "Executar" (no final da página)
+Se deu tudo certo, aparecerá uma mensagem de sucesso
+
+Passo 5: Testando o sistema
+
+Abra seu navegador
+Digite: seudominio.com (substitua pelo seu domínio real)
+O site deve carregar normalmente
+Para acessar o painel admin: seudominio.com/admin
+
+Email admin: admin@admin.com
+
+Senha: admin123v
+
+Passo 6: Configurando o Gateway de Pagamento
+
+Acesse: seudominio.com/admin
+Faça login com usuário e senha (geralmente está no arquivo de documentação)
+Procure por "Configurações" ou "Gateway"
+Configure seus dados de pagamento conforme as instruções do seu provedor

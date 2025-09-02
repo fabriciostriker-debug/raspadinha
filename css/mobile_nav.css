@@ -1,0 +1,108 @@
+/* Barra de navegação mobile (reutilizável) */
+.mobile-nav {
+  /* Fixação na viewport com uso reduzido de !important */
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
+  left: 0.5rem;
+  right: 0.5rem;
+  width: calc(100% - 1rem);
+  /* Reduzido z-index para evitar conflitos, mantendo acima de elementos principais */
+  z-index: 50;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  pointer-events: auto;
+
+  background: linear-gradient(135deg, rgba(10, 10, 15, 0.95) 0%, rgba(26, 26, 46, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 20px;
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  /* Cores próprias, não herdadas da página */
+  color: #e5e7eb; /* text-gray-200 */
+  
+  /* Layout horizontal para os botões */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+}
+
+.mobile-nav-btn {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  min-width: 60px;
+  text-align: center;
+}
+
+.mobile-nav-btn:hover {
+  background: rgba(0, 255, 136, 0.1);
+  transform: translateY(-2px);
+}
+
+.mobile-nav-btn i {
+  font-size: 1.25rem;
+}
+
+.mobile-nav-btn span {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.mobile-nav-deposit {
+  background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+  border: 4px solid rgba(0, 255, 136, 0.3);
+  box-shadow:
+    0 8px 16px rgba(0, 255, 136, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  /* Garantir que o botão de depósito não quebre o layout quando a barra for empurrada */
+  will-change: transform;
+}
+
+/* Mantém o ícone do botão de depósito sempre branco */
+.mobile-nav-deposit i {
+  color: #ffffff;
+}
+
+.mobile-nav-deposit span {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Garante cores dos ícones e textos independente do tema da página */
+.mobile-nav i {
+  color: #e5e7eb; /* text-gray-200 */
+}
+
+.mobile-nav span {
+  color: #e5e7eb; /* text-gray-200 */
+}
+
+/* Realce leve do item ativo/hover sem depender de utilitários da página */
+.mobile-nav .mobile-nav-btn:hover i,
+.mobile-nav .mobile-nav-btn:hover span {
+  color: #00ff88;
+}
+
+.mobile-nav-deposit:hover {
+  background: linear-gradient(135deg, #00cc6a 0%, #00aa55 100%);
+}
+
+@media (min-width: 768px) {
+  .mobile-nav {
+    display: none !important;
+    pointer-events: none;
+  }
+}
