@@ -340,25 +340,35 @@ class FortunaPixGame {
         // Descontar o valor da aposta do saldo
         const headers = { 'Content-Type': 'application/json' };
         const body = { valor_aposta: this.valorAposta };
-        
+
         try {
-            const response = await fetch('descontar_saldo.php', {
+            // Tenta primeiro a URL sem extensão
+            let response = await fetch('descontar_saldo', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(body)
             });
-            
+
+            // Se der 404, tenta com .php
+            if (!response.ok && response.status === 404) {
+                response = await fetch('descontar_saldo.php', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(body)
+                });
+            }
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.erro || 'Erro desconhecido');
             }
-            
+
             const data = await response.json();
-            
+
             if (data.sucesso) {
                 if (data.saldo) {
                     this.updateBalance(data.saldo);
-                    
+
                     // Atualizar também o saldo na função global
                     if (typeof window.updateBalance === 'function') {
                         window.updateBalance();
@@ -378,12 +388,13 @@ class FortunaPixGame {
             const errorMsg = error.message === 'Saldo insuficiente' ? 
                 'Saldo insuficiente ❌' : 
                 'Erro ao processar pagamento ❌';
-                
+
             this.showErrorMessage(errorMsg);
             this.blockGame();
             return false;
         }
     }
+
 
     scratch(event, type) {
         if (this.gameBlocked) return 0;
@@ -778,7 +789,7 @@ class FortunaPixGame {
             valor_aposta: this.valorAposta 
         };
         
-        fetch('registrar_jogada.php', {
+        fetch('registrar_jogada', {
             method: 'POST',
             headers: headers,
             body: JSON.stringify(body)

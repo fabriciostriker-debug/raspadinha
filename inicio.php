@@ -1469,11 +1469,21 @@ function mostrarMensagemSucesso() {
             const errorElement = document.getElementById('loginErro');
 
             try {
-                const res = await fetch('login', {
+                // Tenta primeiro a URL sem extensão
+                let res = await fetch('login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
+
+                // Se der 404, tenta com .php
+                if (!res.ok && res.status === 404) {
+                    res = await fetch('login.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                }
 
                 const result = await res.json();
 
@@ -1489,17 +1499,28 @@ function mostrarMensagemSucesso() {
             }
         });
 
+
         document.getElementById('formRegister').addEventListener('submit', async function(e) {
             e.preventDefault();
             const formData = new FormData(this);
             const dados = Object.fromEntries(formData.entries());
 
             try {
-                const res = await fetch("register", {
+                // Tenta primeiro a URL sem extensão
+                let res = await fetch("register", {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(dados)
                 });
+
+                // Se der 404, tenta com .php
+                if (!res.ok && res.status === 404) {
+                    res = await fetch("register.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(dados)
+                    });
+                }
 
                 const resposta = await res.json();
 
@@ -1512,6 +1533,7 @@ function mostrarMensagemSucesso() {
                 alert('Erro de conexão. Tente novamente.');
             }
         });
+
 
         // Intersection Observer for animations
         const observerOptions = {
