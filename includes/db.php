@@ -3,7 +3,7 @@ date_default_timezone_set('America/Sao_Paulo');
 ini_set("display_errors", 1);
 error_reporting(E_ALL);
 
-// Função para ler .env (somente se não existir)
+// Função para ler .env
 if (!function_exists('loadEnv')) {
     function loadEnv($file) {
         if (!file_exists($file)) return [];
@@ -20,12 +20,14 @@ if (!function_exists('loadEnv')) {
     }
 }
 
-// Função segura para tentar conexão (somente se não existir)
+// Função segura para tentar conexão
 if (!function_exists('tryConnect')) {
     function tryConnect($host, $user, $pass, $db) {
         try {
+            // Desabilita warnings para capturar falhas com exceptions
+            mysqli_report(MYSQLI_REPORT_STRICT);
             $conn = new mysqli($host, $user, $pass, $db);
-            if ($conn->connect_error) throw new Exception($conn->connect_error);
+            $conn->query("SET time_zone = '-03:00'");
             return $conn;
         } catch (Exception $e) {
             return null;
@@ -33,31 +35,26 @@ if (!function_exists('tryConnect')) {
     }
 }
 
-// Caminho do arquivo .env
+// Carrega .env se existir
 $envPath = __DIR__ . '/../.env';
-
-// Carrega variáveis do .env se existir
 $env = file_exists($envPath) ? loadEnv($envPath) : [];
 
-// Pega valores do .env ou define defaults
-$hostEnv = isset($env['MYSQL_HOST']) ? $env['MYSQL_HOST'] : 'db';
-$db      = isset($env['MYSQL_DATABASE']) ? $env['MYSQL_DATABASE'] : '';
-$user    = isset($env['MYSQL_USER']) ? $env['MYSQL_USER'] : '';
-$pass    = isset($env['MYSQL_PASSWORD']) ? $env['MYSQL_PASSWORD'] : '';
+// Valores
+$hostEnv = $env['MYSQL_HOST'] ?? 'db';
+$db      = $env['MYSQL_DATABASE'] ?? '';
+$user    = $env['MYSQL_USER'] ?? '';
+$pass    = $env['MYSQL_PASSWORD'] ?? '';
 
-// Primeiro tenta o host do .env (Docker)
-$conn = tryConnect($hostEnv, $user, $pass, $db);
+// Ordem de tentativa: primeiro localhost, depois .env host
+$hostsToTry = ['localhost', $hostEnv];
 
-// Se falhar, tenta localhost (Hostinger)
-if (!$conn) {
-    $conn = tryConnect('localhost', $user, $pass, $db);
+$conn = null;
+foreach ($hostsToTry as $host) {
+    $conn = tryConnect($host, $user, $pass, $db);
+    if ($conn) break; // conexão bem-sucedida
 }
 
-// Se ainda falhar, exibe erro
 if (!$conn) {
     die("Erro na conexão com o banco de dados. Verifique host, usuário e senha.");
 }
-
-// Ajusta fuso horário da conexão
-$conn->query("SET time_zone = '-03:00'");
 ?>
