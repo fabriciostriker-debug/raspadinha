@@ -1469,7 +1469,7 @@ function mostrarMensagemSucesso() {
             const errorElement = document.getElementById('loginErro');
 
             try {
-                const res = await fetch('login.php', {
+                const res = await fetch('login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
@@ -1495,7 +1495,7 @@ function mostrarMensagemSucesso() {
             const dados = Object.fromEntries(formData.entries());
 
             try {
-                const res = await fetch("register.php", {
+                const res = await fetch("register", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(dados)
