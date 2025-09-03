@@ -1,3 +1,8 @@
+# Protege o arquivo .env para que ninguém acesse pelo navegador
+<Files ".env">
+    Require all denied
+</Files>
+
 RewriteEngine On
 
 # 1️⃣ Redireciona arquivos .php para versão sem extensão
