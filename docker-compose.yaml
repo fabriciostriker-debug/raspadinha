@@ -1,8 +1,35 @@
 services:
   web:
-    image: php:apache
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${WEB_CONTAINER}
     ports:
-      - "80:80"
+      - "${APP_PORT}:80"
     volumes:
       - .:/var/www/html
-    container_name: php-apache
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  db:
+    image: mysql
+    container_name: ${DB_CONTAINER}
+    restart: always
+    ports:
+      - "${DB_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+volumes:
+  db_data:
